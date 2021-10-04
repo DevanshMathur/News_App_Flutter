@@ -1,7 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:news_headlines/src/constants/app_utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_headlines/src/app/block/search/search_bloc.dart';
+import 'package:news_headlines/src/app/block/search/search_event.dart';
+import 'package:news_headlines/src/app/block/search/search_state.dart';
+import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
+import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 
-import '../widgets/news_item.dart';
+class SearchScreenWidget extends StatelessWidget {
+  const SearchScreenWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SearchBloc()
+        ..add(
+          const SearchModule(
+            page: 1,
+            query: '""'
+          ),
+        ),
+      child: const SearchScreen(),
+    );
+  }
+}
+
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -11,23 +33,172 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  static int page = 1;
+  String? query;
+  static final searchController = TextEditingController();
+  static List<Article> articleList = [];
+  static late SearchBloc searchBloc;
+  static bool isNextPage = true;
+  static bool isLoading = true;
+  static late ScrollController _controller;
+
+
+  @override
+  void initState() {
+    super.initState();
+    searchBloc = BlocProvider.of<SearchBloc>(context);
+    _controller = ScrollController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        isNextPage &&
+        !isLoading) {
+      page++;
+      searchBloc.add(SearchModule(
+          page: page,
+          query: searchController.text));
+      isLoading = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("News Hunt"),
-      ),
-      body: ListView.builder(
-          itemCount: AppUtils.newsList.length,
-          itemBuilder: (context, position) {
-            return Card(
-              elevation: 10,
-              margin: const EdgeInsets.all(5),
-              child: NewsItem(AppUtils.newsList[position]),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: searchController,
+                  showCursor: true,
+                  cursorWidth: 5,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  articleList.clear();
+                  searchBloc.add(
+                    SearchModule(
+                      page: page,
+                      query: searchController.text,
+                    ),
+                  );
+                },
+                child: const Icon(Icons.search_outlined),
+              ),
+            ],
+          ),
+        ),
+        body: const SearchState2()
+      // BlocProvider(
+      //   create: (context) => SearchBloc()
+      //     ..add(
+      //       SearchModule(
+      //           page: page, query: '""' /*, country: null, category: null*/),
+      //     ),
+      //   child: const SearchState2(),
+    // ),
+    );
+  }
+}
+
+class SearchState2 extends StatelessWidget {
+  const SearchState2({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SearchBloc, SearchState>(
+      bloc: _SearchScreenState.searchBloc,
+      builder: (context, state) {
+        if (state is InitialSearchState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("LoadingSearchState"),
+                CircularProgressIndicator(),
+              ],
+            ),
+          );
+        } else if (state is LoadedSearchState) {
+          _SearchScreenState.articleList.addAll(state.searchResponse.data!.articles!);
+          if (_SearchScreenState.articleList.isNotEmpty) {
+            _SearchScreenState.isNextPage =
+            state.searchResponse.data!.totalResults! > _SearchScreenState.page
+                ? true
+                : false;
+            _SearchScreenState.isLoading = false;
+            return ListView.builder(
+              controller: _SearchScreenState._controller,
+              itemCount: _SearchScreenState.articleList.length,
+              itemBuilder: (context, position) {
+                return Card(
+                  elevation: 10,
+                  margin: const EdgeInsets.all(5),
+                  // child: Container(
+                  //   padding: const EdgeInsets.fromLTRB(0, 2, 0, 1),
+                  //   child: Text("Item" + position.toString()),
+                  // ),
+                  child:
+                  NewsItem(_SearchScreenState.articleList[position]),
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: Text("Enter Search Text"),
             );
           }
-      ),
+        } else if (state is LoadingSearchState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("LoadingSearchState"),
+                CircularProgressIndicator(),
+              ],
+            ),
+          );
+        } else if (state is SearchApiErrorState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("SearchApiErrorState"),
+              ],
+            ),
+          );
+        } else if (state is SearchErrorState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("SearchErrorState"),
+              ],
+            ),
+          );
+        }
+        return const Text('error');
+      },
     );
   }
 }

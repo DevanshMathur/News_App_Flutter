@@ -51,6 +51,9 @@ class NewsItem extends StatelessWidget {
                       height: 200,
                       alignment: Alignment.center,
                       child: FadeInImage.assetNetwork(
+                        imageErrorBuilder: (context, error, stackTrace) {
+                          return Image.asset("assets/images/news.png");
+                        },
                         placeholder: "assets/placeholder/loading.jpg",
                         image: newsItem!.urlToImage.toString(),
                       ),

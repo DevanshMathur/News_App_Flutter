@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_headlines/src/app/block/home/home_bloc.dart';
 import 'package:news_headlines/src/app/block/home/home_events.dart';
 import 'package:news_headlines/src/app/block/home/home_state.dart';
+import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 import 'package:news_headlines/src/constants/app_utils.dart';
 
@@ -17,34 +18,44 @@ class NewsHome extends StatefulWidget {
 }
 
 class NewsHomeState extends State<NewsHome> {
-  // List<Article> articleList = [];
-  // int page = 0;
-  // bool isNextPage = true;
-  // bool isLoading = true;
-  // late HomeBloc homeBloc;
-  // late ScrollController _controller;
-  
+  static List<Article> articleList = [];
+  static int page = 0;
+  static bool isNextPage = true;
+  static bool isLoading = true;
+  static late HomeBloc homeBloc;
+  static late ScrollController _controller;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = ScrollController();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _controller = ScrollController();
+  }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    homeBloc = BlocProvider.of<HomeBloc>(context);
+    _controller.addListener(_scrollListener);
+  }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   homeBloc = BlocProvider.of<HomeBloc> (context);
-  //   _controller.addListener(_scrollListener);
-  // }
+  void _scrollListener() {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        isNextPage &&
+        !isLoading) {
+      page++;
+      homeBloc.add(HomeModule(
+          page: page,
+          country: AppUtils.getSelectedCountry(),
+          category: AppUtils.getSelectedCategory()));
+      isLoading = true;
+    }
+  }
 
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _controller.dispose();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +163,7 @@ class NewsHomeState extends State<NewsHome> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const SearchScreen(),
+                      builder: (context) => const SearchScreenWidget(),
                     ),
                   );
                 },
@@ -163,10 +174,7 @@ class NewsHomeState extends State<NewsHome> {
             ),
           ],
         ),
-        body: BlocProvider(
-          create: (context) => HomeBloc()..add(HomeModule(page: 0,country: AppUtils.getSelectedCountry(), category: AppUtils.getSelectedCategory())),
-          child: const NewsState(),
-        ),
+        body: const NewsState(),
     );
   }
 
@@ -175,17 +183,6 @@ class NewsHomeState extends State<NewsHome> {
       AppUtils.darkMode = !AppUtils.darkMode;
     });
   }
-
-  // void _scrollListener() {
-  //   if (_controller.offset >= _controller.position.maxScrollExtent
-  //   && isNextPage && !isLoading) {
-  //     homeBloc.add(HomeModule(
-  //         page: page,
-  //     country: AppUtils.getSelectedCountry(),
-  //     category: AppUtils.getSelectedCategory()));
-  //     isLoading = true;
-  //   }
-  // }
 }
 
 class NewsState extends StatelessWidget {
@@ -194,36 +191,69 @@ class NewsState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
-      bloc: BlocProvider.of<HomeBloc> (context),
+      bloc: NewsHomeState.homeBloc,
       builder: (context, state) {
         if (state is InitialSearchState) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                CircularProgressIndicator(),
+                Text("InitialSearchState"),
+              ],
+            ),
           );
-        }
-        else if (state is LoadedSearchState) {
+        } else if (state is LoadedSearchState) {
+          NewsHomeState.articleList
+              .addAll(state.searchResponse.data!.articles!);
+          NewsHomeState.isNextPage =
+              state.searchResponse.data!.totalResults! > NewsHomeState.page
+                  ? true
+                  : false;
+          NewsHomeState.isLoading = false;
           return ListView.builder(
-              itemCount: state.searchResponse.data!.articles!.length
-              ,itemBuilder: (context, position) {
-                return Card(
-                  elevation: 10,
-                  margin: const EdgeInsets.all(5),
-                  child: NewsItem(state.searchResponse.data!.articles![position]),
-                );
-          });
-        }
-        else if (state is LoadingSearchState) {
-          return const Text("LoadingSearchState");
-        }
-        else if (state is SearchApiErrorState) {
-          return const Text("SearchApiErrorState");
-        }
-        else if (state is SearchErrorState) {
-          return const Text("SearchErrorState");
+            controller: NewsHomeState._controller,
+            itemCount: NewsHomeState.articleList.length,
+            itemBuilder: (context, position) {
+              return Card(
+                elevation: 10,
+                margin: const EdgeInsets.all(5),
+                child: NewsItem(NewsHomeState.articleList[position]),
+              );
+            },
+          );
+        } else if (state is LoadingSearchState) {
+          return
+            NewsHomeState.isLoading ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("LoadingSearchState"),
+                CircularProgressIndicator(),
+              ],
+            ),
+          ) : const Text("Loading");
+        } else if (state is SearchApiErrorState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("SearchApiErrorState"),
+              ],
+            ),
+          );
+        } else if (state is SearchErrorState) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("SearchErrorState"),
+              ],
+            ),
+          );
         }
         return const Text('error');
       },
     );
   }
-
 }

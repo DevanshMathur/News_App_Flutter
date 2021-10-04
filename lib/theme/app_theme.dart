@@ -4,14 +4,15 @@ import 'package:news_headlines/src/constants/app_utils.dart';
 class AppTheme {
   static ThemeData getTheme() {
     if (AppUtils.darkMode) {
-      return lightTheme;
-    } else {
       return darkTheme;
+    } else {
+      return lightTheme;
     }
   }
 
   static final ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: Colors.white,
+      cardColor: Colors.white,
       primaryColor: Colors.blue[500],
       canvasColor: Colors.white,
       appBarTheme: AppBarTheme(
@@ -30,6 +31,7 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData(
       scaffoldBackgroundColor: Colors.grey[700],
+      cardColor:  Colors.grey[700],
       canvasColor: Colors.grey[800],
       toggleableActiveColor: Colors.grey[300],
       appBarTheme: AppBarTheme(

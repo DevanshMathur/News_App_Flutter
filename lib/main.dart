@@ -1,9 +1,13 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_headlines/src/api_lib/service_manager.dart';
+import 'package:news_headlines/src/app/block/home/home_bloc.dart';
+import 'package:news_headlines/src/app/block/home/home_events.dart';
 import 'package:news_headlines/src/app/ui/home/news_home.dart';
 import 'package:news_headlines/src/constants/api_constants.dart';
+import 'package:news_headlines/src/constants/app_utils.dart';
 import 'package:news_headlines/theme/app_theme.dart';
 
 void main() {
@@ -22,9 +26,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.getTheme(),
       debugShowCheckedModeBanner: false,
-      home: const NewsHome()
+      home: BlocProvider(
+        create: (context) => HomeBloc()
+          ..add(
+            HomeModule(
+              page: 0,
+              country: AppUtils.getSelectedCountry(),
+              category: AppUtils.getSelectedCategory(),
+            ),
+          ),
+        child: const NewsHome(),
+      ),
     );
   }
 }
