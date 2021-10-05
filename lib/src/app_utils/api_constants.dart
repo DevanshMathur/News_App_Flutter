@@ -13,7 +13,7 @@ class NewsApiConstants {
   static const int kSuccessCode = 200;
   static const int kBadRequestCode = 400;
   static const int kUnauthorizedCode = 401;
-  static const int kTooManyRequestsCode = 2429;
+  static const int kTooManyRequestsCode = 429;
   static const int kServerErrorCode = 500;
 
   //API Errors
@@ -41,5 +41,31 @@ class NewsApiConstants {
   static const String kStatusHeader = 'status';
   static const String kTotalResultsHeader = 'totalResults';
   static const String kArticlesHeader = 'articles';
+
+  static String getServerMessage(int code) {
+    String _message = "";
+    switch(code) {
+      case kSuccessCode:
+        _message = "Success";
+        break;
+
+      case kBadRequestCode:
+        _message = "Bad Request";
+        break;
+
+      case kUnauthorizedCode:
+        _message = "Unauthorized";
+        break;
+
+      case kTooManyRequestsCode:
+        _message = "Too Many Requests";
+        break;
+
+      case kServerErrorCode:
+        _message = "Server Error";
+        break;
+    }
+    return _message;
+  }
 
 }

@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_headlines/src/constants/app_utils.dart';
 
 class AppTheme {
-  static ThemeData getTheme() {
-    if (AppUtils.darkMode) {
-      return darkTheme;
-    } else {
-      return lightTheme;
-    }
-  }
 
   static final ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: Colors.white,

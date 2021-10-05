@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 import 'package:news_headlines/src/api_lib/lib_api_manager.dart';
-import 'package:news_headlines/src/constants/api_constants.dart';
+import 'package:news_headlines/src/app_utils/api_constants.dart';
 import 'api/model/news_response.dart';
 import 'api/news_api_client.dart';
 

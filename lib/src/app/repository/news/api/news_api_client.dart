@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:news_headlines/src/constants/api_constants.dart';
+import 'package:news_headlines/src/app_utils/api_constants.dart';
 import 'package:retrofit/http.dart';
 
 import 'model/news_response.dart';

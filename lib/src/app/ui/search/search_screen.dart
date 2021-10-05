@@ -14,16 +14,12 @@ class SearchScreenWidget extends StatelessWidget {
     return BlocProvider(
       create: (context) => SearchBloc()
         ..add(
-          const SearchModule(
-            page: 1,
-            query: '""'
-          ),
+          const SearchModule(page: 1, query: '""'),
         ),
       child: const SearchScreen(),
     );
   }
 }
-
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -35,19 +31,19 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   static int page = 1;
   String? query;
-  static final searchController = TextEditingController();
   static List<Article> articleList = [];
   static late SearchBloc searchBloc;
   static bool isNextPage = true;
   static bool isLoading = true;
   static late ScrollController _controller;
-
+  late TextEditingController searchController;
 
   @override
   void initState() {
     super.initState();
     searchBloc = BlocProvider.of<SearchBloc>(context);
     _controller = ScrollController();
+    searchController = TextEditingController();
   }
 
   @override
@@ -61,9 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
         isNextPage &&
         !isLoading) {
       page++;
-      searchBloc.add(SearchModule(
-          page: page,
-          query: searchController.text));
+      searchBloc.add(SearchModule(page: page, query: searchController.text));
       isLoading = true;
     }
   }
@@ -71,8 +65,8 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     super.dispose();
-    searchController.dispose();
     _controller.dispose();
+    searchController.dispose();
   }
 
   @override
@@ -83,11 +77,28 @@ class _SearchScreenState extends State<SearchScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
+              SizedBox(
+                width: 200,
+                // elevation: 5,
+                // shape: const RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.all(Radius.circular(5)),),
                 child: TextField(
+                  textInputAction: TextInputAction.go,
+                  onSubmitted: (value) {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    articleList.clear();
+                    searchBloc.add(
+                      SearchModule(
+                        page: page,
+                        query: value,
+                      ),
+                    );
+                  },
+                  cursorColor: Colors.white,
+                  decoration: const InputDecoration.collapsed(
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: 'Enter search text'),
                   controller: searchController,
-                  showCursor: true,
-                  cursorWidth: 5,
                   style: const TextStyle(
                     color: Colors.white,
                   ),
@@ -95,6 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
               GestureDetector(
                 onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   articleList.clear();
                   searchBloc.add(
                     SearchModule(
@@ -109,15 +121,15 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         body: const SearchState2()
-      // BlocProvider(
-      //   create: (context) => SearchBloc()
-      //     ..add(
-      //       SearchModule(
-      //           page: page, query: '""' /*, country: null, category: null*/),
-      //     ),
-      //   child: const SearchState2(),
-    // ),
-    );
+        // BlocProvider(
+        //   create: (context) => SearchBloc()
+        //     ..add(
+        //       SearchModule(
+        //           page: page, query: '""' /*, country: null, category: null*/),
+        //     ),
+        //   child: const SearchState2(),
+        // ),
+        );
   }
 }
 
@@ -140,12 +152,14 @@ class SearchState2 extends StatelessWidget {
             ),
           );
         } else if (state is LoadedSearchState) {
-          _SearchScreenState.articleList.addAll(state.searchResponse.data!.articles!);
+          _SearchScreenState.articleList
+              .addAll(state.searchResponse.data!.articles!);
           if (_SearchScreenState.articleList.isNotEmpty) {
             _SearchScreenState.isNextPage =
-            state.searchResponse.data!.totalResults! > _SearchScreenState.page
-                ? true
-                : false;
+                state.searchResponse.data!.totalResults! >
+                        _SearchScreenState.page
+                    ? true
+                    : false;
             _SearchScreenState.isLoading = false;
             return ListView.builder(
               controller: _SearchScreenState._controller,
@@ -158,8 +172,7 @@ class SearchState2 extends StatelessWidget {
                   //   padding: const EdgeInsets.fromLTRB(0, 2, 0, 1),
                   //   child: Text("Item" + position.toString()),
                   // ),
-                  child:
-                  NewsItem(_SearchScreenState.articleList[position]),
+                  child: NewsItem(_SearchScreenState.articleList[position]),
                 );
               },
             );
@@ -169,15 +182,31 @@ class SearchState2 extends StatelessWidget {
             );
           }
         } else if (state is LoadingSearchState) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("LoadingSearchState"),
-                CircularProgressIndicator(),
-              ],
-            ),
-          );
+          return _SearchScreenState.articleList.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text("LoadingSearchState"),
+                      CircularProgressIndicator(),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  controller: _SearchScreenState._controller,
+                  itemCount: _SearchScreenState.articleList.length,
+                  itemBuilder: (context, position) {
+                    return Card(
+                      elevation: 10,
+                      margin: const EdgeInsets.all(5),
+                      // child: Container(
+                      //   padding: const EdgeInsets.fromLTRB(0, 2, 0, 1),
+                      //   child: Text("Item" + position.toString()),
+                      // ),
+                      child: NewsItem(_SearchScreenState.articleList[position]),
+                    );
+                  },
+                );
         } else if (state is SearchApiErrorState) {
           return Center(
             child: Column(
@@ -191,8 +220,11 @@ class SearchState2 extends StatelessWidget {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("SearchErrorState"),
+              children: [
+                const Text("SearchErrorState"),
+                state.error!.getErrorCode() == 429
+                    ? const Text("Too many req")
+                    : Container(),
               ],
             ),
           );

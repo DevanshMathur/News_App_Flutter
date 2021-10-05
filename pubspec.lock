@@ -472,7 +472,7 @@ packages:
     source: hosted
     version: "0.27.2"
   shared_preferences:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"

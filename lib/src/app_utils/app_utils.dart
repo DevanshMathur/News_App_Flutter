@@ -1,8 +1,55 @@
+import 'package:flutter/material.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/article_source.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
+import 'package:news_headlines/theme/app_theme.dart';
+
+import 'app_preference.dart';
 
 class AppUtils {
-  static final List<String> languageCodeList = [
+  // static String? _selectedCategory = 'All';
+  // static String? _selectedLanguage = 'All';
+  // static String? _selectedCountry = 'All';
+  // static const bool _darkMode = false;
+
+  static String? getSelectedCategoryCode() =>
+      getSelectedCategory() != 'All' ? getSelectedCategory().toLowerCase() : null;
+
+  static void setSelectedCategory(String value) => AppPreference.setSelectedCategory(value);
+
+  static String getSelectedCategory() => AppPreference.getSelectedCategory();
+
+
+
+  static String? getSelectedLanguageCode() => getSelectedLanguage() != 'All'
+      ? _languageCodeList[_languageList.indexOf(getSelectedLanguage())]
+      : null;
+
+  static void setSelectedLanguage(String value) => AppPreference.setSelectedLanguage(value);
+
+  static String getSelectedLanguage() => AppPreference.getSelectedLanguage();
+
+  static String? getSelectedCountryCode() => getSelectedCountry() != 'All'
+      ? _countryCodeList[_countryList.indexOf(getSelectedCountry())]
+      : null;
+
+  static void setSelectedCountry(String value) => AppPreference.setSelectedCountry(value);
+
+  static String getSelectedCountry() => AppPreference.getSelectedCountry();
+
+  static bool getDarkMode() => AppPreference.getDarkThemeEnabled();
+
+  static void setDarkMode(bool value) => AppPreference.setDarkThemeEnabled(value);
+
+  static ThemeData getAppTheme() =>
+      getDarkMode() ? AppTheme.darkTheme : AppTheme.lightTheme;
+
+  static List<String> getLanguageList() => _languageList;
+
+  static List<String> getCategoryList() => _categoryList;
+
+  static List<String> getCountryList() => _countryList;
+
+  static final List<String> _languageCodeList = [
     '',
     'ar',
     'de',
@@ -20,7 +67,7 @@ class AppUtils {
     'zh'
   ];
 
-  static final List<String> countryCodeList = [
+  static final List<String> _countryCodeList = [
     '',
     'ae',
     'ar',
@@ -78,7 +125,7 @@ class AppUtils {
     'za'
   ];
 
-  static final List<String> categoryList = [
+  static final List<String> _categoryList = [
     'All',
     'Business',
     'Entertainment',
@@ -89,7 +136,7 @@ class AppUtils {
     'Technology'
   ];
 
-  static final List<String> languageList = [
+  static final List<String> _languageList = [
     'All',
     'Arabic',
     'German',
@@ -107,81 +154,63 @@ class AppUtils {
     'Chinese'
   ];
 
-  static final List<String> countryList = [
+  static final List<String> _countryList = [
     'All',
-    'ae',
-    'ar',
-    'at',
-    'au',
-    'be',
-    'bg',
-    'br',
-    'ca',
-    'ch',
-    'cn',
-    'co',
-    'cu',
-    'cz',
-    'de',
-    'eg',
-    'fr',
-    'gb',
-    'gr',
-    'hk',
-    'hu',
-    'id',
-    'ie',
-    'il',
+    'United Arab Emirates',
+    'Argentina',
+    'Austria',
+    'Australia',
+    'Belgium',
+    'Bulgaria',
+    'Brazil',
+    'Canada',
+    'Switzerland',
+    'China',
+    'Colombia',
+    'Cuba',
+    'Czech Republic',
+    'Germany',
+    'Egypt',
+    'France',
+    'United Kingdom',
+    'Greece',
+    'Hong Kong',
+    'Hungary',
+    'Indonesia',
+    'Ireland',
+    'Israel',
     'India',
-    'it',
-    'jp',
-    'kr',
-    'lt',
-    'lv',
-    'ma',
-    'mx',
-    'my',
-    'ng',
-    'nl',
-    'no',
-    'nz',
-    'ph',
-    'pl',
-    'pt',
-    'ro',
-    'rs',
-    'ru',
-    'sa',
-    'se',
-    'sg',
-    'si',
-    'sk',
-    'th',
-    'tr',
-    'tw',
-    'ua',
-    'us',
-    've',
-    'za'
+    'Italy',
+    'Japan',
+    'South Korea',
+    'Lithuania',
+    'Latvia',
+    'Morocco',
+    'Mexico',
+    'Malaysia',
+    'Nigeria',
+    'Netherlands',
+    'Norway',
+    'New Zealand',
+    'Philippines',
+    'Poland',
+    'Portugal',
+    'Romania',
+    'Serbia',
+    'Russia',
+    'Saudi Arabia',
+    'Sweden',
+    'Singapore',
+    'Slovenia',
+    'Slovakia',
+    'Thailand',
+    'Turkey',
+    'Taiwan',
+    'Ukraine',
+    'United States',
+    'Venezuela',
+    'South Africa'
   ];
-
-  static String? selectedCategory = 'All';
-  static String? selectedLanguage = 'All';
-  static String? selectedCountry = 'All';
-
-  static bool darkMode = false;
-
-  static String? getSelectedCategory() => selectedCategory != 'All'
-      ? selectedCategory!.toLowerCase()
-      : null;
-
-  static String? getSelectedLanguage() => selectedLanguage != 'All'
-      ? languageCodeList[languageList.indexOf(selectedLanguage!)]
-      : null;
-
-  static String? getSelectedCountry() => selectedCountry != 'All'
-      ? countryCodeList[countryList.indexOf(selectedCountry!)]
-      : null;
 
   static List<Article> newsList = [
     Article(
