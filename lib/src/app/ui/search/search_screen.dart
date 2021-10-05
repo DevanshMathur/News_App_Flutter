@@ -69,56 +69,56 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 200,
-                // elevation: 5,
-                // shape: const RoundedRectangleBorder(
-                //   borderRadius: BorderRadius.all(Radius.circular(5)),),
-                child: TextField(
-                  textInputAction: TextInputAction.go,
-                  onSubmitted: (value) {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    articleList.clear();
-                    searchBloc.add(
-                      SearchModule(
-                        page: page,
-                        query: value,
-                      ),
-                    );
-                  },
-                  cursorColor: Colors.white,
-                  decoration: const InputDecoration.collapsed(
-                      hintStyle: TextStyle(color: Colors.white),
-                      hintText: 'Enter search text'),
-                  controller: searchController,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 200,
+              // elevation: 5,
+              // shape: const RoundedRectangleBorder(
+              //   borderRadius: BorderRadius.all(Radius.circular(5)),),
+              child: TextField(
+                textInputAction: TextInputAction.go,
+                onSubmitted: (value) {
                   FocusManager.instance.primaryFocus?.unfocus();
                   articleList.clear();
                   searchBloc.add(
                     SearchModule(
                       page: page,
-                      query: searchController.text,
+                      query: value,
                     ),
                   );
                 },
-                child: const Icon(Icons.search_outlined),
+                cursorColor: Colors.white,
+                decoration: const InputDecoration.collapsed(
+                    hintStyle: TextStyle(color: Colors.white),
+                    hintText: 'Enter search text'),
+                controller: searchController,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
               ),
-            ],
-          ),
+            ),
+            GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                articleList.clear();
+                searchBloc.add(
+                  SearchModule(
+                    page: page,
+                    query: searchController.text,
+                  ),
+                );
+              },
+              child: const Icon(Icons.search_outlined),
+            ),
+          ],
         ),
-        body: const SearchState2()
-        );
+      ),
+      body: const SearchState2(),
+    );
   }
 }
 
@@ -131,14 +131,8 @@ class SearchState2 extends StatelessWidget {
       bloc: _SearchScreenState.searchBloc,
       builder: (context, state) {
         if (state is InitialSearchState) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("LoadingSearchState"),
-                CircularProgressIndicator(),
-              ],
-            ),
+          return const Center(
+            child: Text("Enter text in top search bar"),
           );
         } else if (state is LoadedSearchState) {
           _SearchScreenState.articleList
@@ -167,7 +161,7 @@ class SearchState2 extends StatelessWidget {
             );
           } else {
             return const Center(
-              child: Text("Enter Search Text"),
+              child: Text("No results found"),
             );
           }
         } else if (state is LoadingSearchState) {
