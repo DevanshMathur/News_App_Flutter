@@ -54,7 +54,12 @@ class _SearchScreenState extends State<SearchScreen> {
         isNextPage &&
         !isLoading) {
       page++;
-      searchBloc.add(SearchModule(page: page, query: searchController.text));
+      searchBloc.add(
+        SearchModule(
+          page: page,
+          query: searchController.text,
+        ),
+      );
       isLoading = true;
     }
   }
@@ -82,14 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: TextField(
                 textInputAction: TextInputAction.go,
                 onSubmitted: (value) {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  articleList.clear();
-                  searchBloc.add(
-                    SearchModule(
-                      page: page,
-                      query: value,
-                    ),
-                  );
+                  search();
                 },
                 cursorColor: Colors.white,
                 decoration: const InputDecoration.collapsed(
@@ -103,14 +101,7 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             GestureDetector(
               onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                articleList.clear();
-                searchBloc.add(
-                  SearchModule(
-                    page: page,
-                    query: searchController.text,
-                  ),
-                );
+                search();
               },
               child: const Icon(Icons.search_outlined),
             ),
@@ -119,6 +110,19 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: const SearchState2(),
     );
+  }
+
+  void search() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (searchController.text.trim().isNotEmpty) {
+      articleList.clear();
+      searchBloc.add(
+        SearchModule(
+          page: page,
+          query: searchController.text,
+        ),
+      );
+    }
   }
 }
 
