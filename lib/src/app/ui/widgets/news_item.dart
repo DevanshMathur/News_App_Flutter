@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
 import 'package:news_headlines/src/navigation/routes.dart';
-
 
 class NewsItem extends StatelessWidget {
   final Article? newsItem;
@@ -14,7 +14,7 @@ class NewsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Routes.newsDetails,arguments: newsItem);
+        Navigator.pushNamed(context, Routes.newsDetails, arguments: newsItem);
         // Navigator.push(
         //   context,
         //   MaterialPageRoute(

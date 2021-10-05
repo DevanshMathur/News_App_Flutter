@@ -12,10 +12,7 @@ class SearchScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SearchBloc()
-        ..add(
-          const SearchModule(page: 1, query: '""'),
-        ),
+      create: (context) => SearchBloc(),
       child: const SearchScreen(),
     );
   }
@@ -30,7 +27,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   static int page = 1;
-  String? query;
+  String query = ' ';
   static List<Article> articleList = [];
   static late SearchBloc searchBloc;
   static bool isNextPage = true;
@@ -121,14 +118,6 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
         body: const SearchState2()
-        // BlocProvider(
-        //   create: (context) => SearchBloc()
-        //     ..add(
-        //       SearchModule(
-        //           page: page, query: '""' /*, country: null, category: null*/),
-        //     ),
-        //   child: const SearchState2(),
-        // ),
         );
   }
 }

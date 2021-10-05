@@ -10,9 +10,9 @@ import 'package:news_headlines/src/app/repository/news/api/model/news_article.da
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 import 'package:news_headlines/src/app_utils/api_constants.dart';
 import 'package:news_headlines/src/app_utils/app_utils.dart';
+import 'package:news_headlines/src/navigation/routes.dart';
 import 'package:news_headlines/theme/app_theme.dart';
 
-import '../search/search_screen.dart';
 
 class NewsScreenWidget extends StatelessWidget {
   const NewsScreenWidget({Key? key}) : super(key: key);
@@ -186,13 +186,13 @@ class NewsHomeState extends State<NewsHome> {
             child: GestureDetector(
               onTap: () {
                 // Navigator.pushNamed(context, "/search");
-                // Navigator.pushNamed(context, Routes.newsSearch);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SearchScreenWidget(),
-                  ),
-                );
+                Navigator.pushNamed(context, Routes.newsSearch);
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const SearchScreenWidget(),
+                //   ),
+                // );
               },
               child: const Icon(
                 Icons.search_outlined,
