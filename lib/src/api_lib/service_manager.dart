@@ -22,14 +22,12 @@ class ServiceManager {
       bool isDebug = false,
       HashMap<String, String>? defaultHeaders}) {
     _serviceManager ??= ServiceManager._instance(
-          baseUrl: baseUrl,
-          isDebug: isDebug,
-          defaultHeaders: defaultHeaders);
+        baseUrl: baseUrl, isDebug: isDebug, defaultHeaders: defaultHeaders);
   }
 
   ServiceManager._instance(
       {@required String? baseUrl,
-        bool isDebug = false,
+      bool isDebug = false,
       HashMap<String, String>? defaultHeaders}) {
     _baseUrl = baseUrl;
     _isDebug = isDebug;
@@ -47,21 +45,19 @@ class ServiceManager {
   }
 
   /// this method creates dio client with basic setting needed for each instance
-  Dio getDioClient(
-      {String? baseUrl,
-      HashMap<String, String>? moreHeaders,}) {
+  Dio getDioClient({
+    String? baseUrl,
+    HashMap<String, String>? moreHeaders,
+  }) {
     final dio = Dio();
 
     HashMap<String, String> hashMap = HashMap();
     hashMap['Content-Type'] = 'application/json; charset=utf-8';
     hashMap['Accept'] = 'application/json; charset=utf-8';
 
-
     dio
       ..options.baseUrl = baseUrl ?? _baseUrl ?? ''
-      ..options
-          .headers
-          .addAll(hashMap);
+      ..options.headers.addAll(hashMap);
     if (baseUrl != null && baseUrl.trim().isNotEmpty) {
       dio.options.baseUrl = baseUrl.trim();
     }
@@ -71,8 +67,6 @@ class ServiceManager {
     if (moreHeaders != null && moreHeaders.isNotEmpty) {
       dio.options.headers.addAll(moreHeaders);
     }
-
-
 
     if (_isDebug) {
       dio.interceptors.add(LogInterceptor(

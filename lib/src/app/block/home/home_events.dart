@@ -10,7 +10,10 @@ class HomeModule extends HomeEvent {
   final String? country;
   final String? category;
 
-  const HomeModule({required this.page, /*required this.pageSize,*/ this.category, this.country});
+  const HomeModule(
+      {required this.page,
+      /*required this.pageSize,*/ this.category,
+      this.country});
 
   @override
   List<Object?> get props => [page];

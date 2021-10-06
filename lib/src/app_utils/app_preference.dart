@@ -1,9 +1,7 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreference {
-
   static const _darkThemeEnabled = "darkThemeEnabled";
   static const _selectedCategory = "selectedCategory";
   static const _selectedCountry = "selectedCountry";
@@ -11,12 +9,13 @@ class AppPreference {
 
   static final Logger _log = Logger('AppPreference');
 
-  static final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  static final Future<SharedPreferences> _prefs =
+      SharedPreferences.getInstance();
   static SharedPreferences? _instance;
-  static Future getAppPrefInstance() async{
+  static Future getAppPrefInstance() async {
     try {
       _instance = await _prefs;
-    } catch(e) {
+    } catch (e) {
       _log.log(Level.INFO, e.toString());
     }
   }

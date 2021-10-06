@@ -4,6 +4,7 @@ import 'package:news_headlines/src/app/block/search/search_bloc.dart';
 import 'package:news_headlines/src/app/block/search/search_event.dart';
 import 'package:news_headlines/src/app/block/search/search_state.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
+import 'package:news_headlines/src/app/ui/search/widgets/search_app_bar.dart';
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 
 class SearchScreenWidget extends StatelessWidget {
@@ -33,14 +34,14 @@ class _SearchScreenState extends State<SearchScreen> {
   static bool isNextPage = true;
   static bool isLoading = true;
   static late ScrollController _controller;
-  late TextEditingController searchController;
+  late TextEditingController queryTextController;
 
   @override
   void initState() {
     super.initState();
     searchBloc = BlocProvider.of<SearchBloc>(context);
     _controller = ScrollController();
-    searchController = TextEditingController();
+    queryTextController = TextEditingController();
   }
 
   @override
@@ -57,7 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
       searchBloc.add(
         SearchModule(
           page: page,
-          query: searchController.text,
+          query: queryTextController.text,
         ),
       );
       isLoading = true;
@@ -68,58 +69,29 @@ class _SearchScreenState extends State<SearchScreen> {
   void dispose() {
     super.dispose();
     _controller.dispose();
-    searchController.dispose();
+    queryTextController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 200,
-              // elevation: 5,
-              // shape: const RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.all(Radius.circular(5)),),
-              child: TextField(
-                textInputAction: TextInputAction.go,
-                onSubmitted: (value) {
-                  search();
-                },
-                cursorColor: Colors.white,
-                decoration: const InputDecoration.collapsed(
-                    hintStyle: TextStyle(color: Colors.white),
-                    hintText: 'Enter search text'),
-                controller: searchController,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                search();
-              },
-              child: const Icon(Icons.search_outlined),
-            ),
-          ],
-        ),
+      appBar: PreferredSize(
+        preferredSize: Size(MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height * 0.09),
+        child: SearchAppBar(searchQuery, queryTextController),
       ),
       body: const SearchState2(),
     );
   }
 
-  void search() {
+  void searchQuery() {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (searchController.text.trim().isNotEmpty) {
+    if (queryTextController.text.trim().isNotEmpty) {
       articleList.clear();
       searchBloc.add(
         SearchModule(
           page: page,
-          query: searchController.text,
+          query: queryTextController.text,
         ),
       );
     }

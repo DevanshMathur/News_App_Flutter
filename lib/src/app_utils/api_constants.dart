@@ -1,5 +1,4 @@
 class NewsApiConstants {
-
   // API URLs
   static const String kBaseUrl = "https://newsapi.org/v2/";
   static const String kTopHeadlinesUrl = "top-headlines";
@@ -44,7 +43,7 @@ class NewsApiConstants {
 
   static String getServerMessage(int code) {
     String _message = "";
-    switch(code) {
+    switch (code) {
       case kSuccessCode:
         _message = "Success";
         break;
@@ -67,5 +66,4 @@ class NewsApiConstants {
     }
     return _message;
   }
-
 }

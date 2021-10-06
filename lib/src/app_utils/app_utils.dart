@@ -11,20 +11,21 @@ class AppUtils {
   // static String? _selectedCountry = 'All';
   // static const bool _darkMode = false;
 
-  static String? getSelectedCategoryCode() =>
-      getSelectedCategory() != 'All' ? getSelectedCategory().toLowerCase() : null;
+  static String? getSelectedCategoryCode() => getSelectedCategory() != 'All'
+      ? getSelectedCategory().toLowerCase()
+      : null;
 
-  static void setSelectedCategory(String value) => AppPreference.setSelectedCategory(value);
+  static void setSelectedCategory(String value) =>
+      AppPreference.setSelectedCategory(value);
 
   static String getSelectedCategory() => AppPreference.getSelectedCategory();
-
-
 
   static String? getSelectedLanguageCode() => getSelectedLanguage() != 'All'
       ? _languageCodeList[_languageList.indexOf(getSelectedLanguage())]
       : null;
 
-  static void setSelectedLanguage(String value) => AppPreference.setSelectedLanguage(value);
+  static void setSelectedLanguage(String value) =>
+      AppPreference.setSelectedLanguage(value);
 
   static String getSelectedLanguage() => AppPreference.getSelectedLanguage();
 
@@ -32,13 +33,15 @@ class AppUtils {
       ? _countryCodeList[_countryList.indexOf(getSelectedCountry())]
       : null;
 
-  static void setSelectedCountry(String value) => AppPreference.setSelectedCountry(value);
+  static void setSelectedCountry(String value) =>
+      AppPreference.setSelectedCountry(value);
 
   static String getSelectedCountry() => AppPreference.getSelectedCountry();
 
   static bool getDarkMode() => AppPreference.getDarkThemeEnabled();
 
-  static void setDarkMode(bool value) => AppPreference.setDarkThemeEnabled(value);
+  static void setDarkMode(bool value) =>
+      AppPreference.setDarkThemeEnabled(value);
 
   static ThemeData getAppTheme() =>
       getDarkMode() ? AppTheme.darkTheme : AppTheme.lightTheme;

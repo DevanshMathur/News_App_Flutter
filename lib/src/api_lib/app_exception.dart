@@ -25,7 +25,6 @@ class ServerError implements Exception {
   /// Provides DioError data to identify real cause during debugging
   DioError? getDioError() => _error;
 
-
   static const int kApiCanceledCode = 1;
   static const int kApiConnectionTimeoutCode = 2;
   static const int kApiDefaultCode = 3;

@@ -8,7 +8,6 @@ import 'model/news_response.dart';
 part 'news_api_client.g.dart';
 // flutter pub run build_runner build
 
-
 @RestApi(baseUrl: NewsApiConstants.kBaseUrl)
 abstract class NewsApiClient {
   factory NewsApiClient(Dio dio) => _NewsApiClient(dio);

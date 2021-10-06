@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-
   static final ThemeData lightTheme = ThemeData(
       scaffoldBackgroundColor: Colors.white,
       cardColor: Colors.white,
@@ -23,7 +22,7 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData(
       scaffoldBackgroundColor: Colors.grey[700],
-      cardColor:  Colors.grey[700],
+      cardColor: Colors.grey[700],
       canvasColor: Colors.grey[800],
       toggleableActiveColor: Colors.grey[300],
       appBarTheme: AppBarTheme(

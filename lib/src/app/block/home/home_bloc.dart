@@ -15,11 +15,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is HomeModule) {
       try {
         final ApiResponseWrapper<NewsResponse> searchResponse =
-        await NewsRepository().getNewsHeadlines(
-            page: event.page,
+            await NewsRepository().getNewsHeadlines(
+                page: event.page,
 // pageSize: pageSize,
-            category: event.category?.toLowerCase() ?? 'general',
-            country: event.country?.toLowerCase() ?? 'in');
+                category: event.category?.toLowerCase() ?? 'general',
+                country: event.country?.toLowerCase() ?? 'in');
         if (searchResponse.data == null ||
             searchResponse.data!.status == 'error') {
           yield SearchErrorState(searchResponse.getException);

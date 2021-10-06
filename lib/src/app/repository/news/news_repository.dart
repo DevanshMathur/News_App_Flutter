@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 import 'package:news_headlines/src/api_lib/lib_api_manager.dart';
 import 'package:news_headlines/src/app_utils/api_constants.dart';
+
 import 'api/model/news_response.dart';
 import 'api/news_api_client.dart';
 
@@ -19,10 +20,11 @@ class NewsRepository {
     _newsApiClient = NewsApiClient(dio);
   }
 
-  Future<ApiResponseWrapper<NewsResponse>> getNewsHeadlines(
-      {required int page,
-      required String? country,
-      required String? category,}) async {
+  Future<ApiResponseWrapper<NewsResponse>> getNewsHeadlines({
+    required int page,
+    required String? country,
+    required String? category,
+  }) async {
     NewsResponse response;
     try {
       response = await _newsApiClient.getHeadlines(
@@ -37,16 +39,18 @@ class NewsRepository {
     return ApiResponseWrapper()..data = response;
   }
 
-  Future<ApiResponseWrapper<NewsResponse>> getSearchedQuery(
-      {required int page,
-      required String? query,
-      // required String? country,
-      // required String? category
-      }) async {
+  Future<ApiResponseWrapper<NewsResponse>> getSearchedQuery({
+    required int page,
+    required String? query,
+    // required String? country,
+    // required String? category
+  }) async {
     NewsResponse response;
     try {
       response = await _newsApiClient.getSearchedNews(
-          page: page, query: query, /*country: country, category: category*/);
+        page: page,
+        query: query, /*country: country, category: category*/
+      );
     } on DioError catch (e) {
       _logger.log(Level.INFO, "Exception occurred: getSearchedQuery", e);
       return ApiResponseWrapper()..setException(ServerError.withError(e));

@@ -7,12 +7,11 @@ import 'package:news_headlines/src/app/block/home/home_state.dart';
 import 'package:news_headlines/src/app/block/theme/theme_bloc.dart';
 import 'package:news_headlines/src/app/block/theme/theme_event.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
+import 'package:news_headlines/src/app/ui/home/widgets/home_app_bar.dart';
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 import 'package:news_headlines/src/app_utils/api_constants.dart';
 import 'package:news_headlines/src/app_utils/app_utils.dart';
-import 'package:news_headlines/src/navigation/routes.dart';
 import 'package:news_headlines/theme/app_theme.dart';
-
 
 class NewsScreenWidget extends StatelessWidget {
   const NewsScreenWidget({Key? key}) : super(key: key);
@@ -145,7 +144,7 @@ class NewsHomeState extends State<NewsHome> {
                         onChanged: (language) {
                           setState(() {
                             AppUtils.setSelectedLanguage(language!);
-                            updateList();
+                            // updateList();
                           });
                         },
                       )
@@ -178,28 +177,12 @@ class NewsHomeState extends State<NewsHome> {
           ),
         ),
       ),
-      appBar: AppBar(
-        title: const Text("Top Headlines"),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: GestureDetector(
-              onTap: () {
-                // Navigator.pushNamed(context, "/search");
-                Navigator.pushNamed(context, Routes.newsSearch);
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => const SearchScreenWidget(),
-                //   ),
-                // );
-              },
-              child: const Icon(
-                Icons.search_outlined,
-              ),
-            ),
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: Size(
+          MediaQuery.of(context).size.width,
+          MediaQuery.of(context).size.height * 0.09,
+        ),
+        child: const HomeAppBar(),
       ),
       body: const NewsState(),
     );
@@ -219,6 +202,7 @@ class NewsHomeState extends State<NewsHome> {
   }
 
   void updateList() {
+
     articleList.clear();
     BlocProvider.of<HomeBloc>(context).add(HomeModule(
         page: page,

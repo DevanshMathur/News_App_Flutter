@@ -17,7 +17,8 @@ class NewsResponse {
 
   NewsResponse(this.status, this.totalResults, this.articles);
 
-  factory NewsResponse.fromJson(Map<String, dynamic> json) => _$NewsResponseFromJson(json);
+  factory NewsResponse.fromJson(Map<String, dynamic> json) =>
+      _$NewsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$NewsResponseToJson(this);
 }
