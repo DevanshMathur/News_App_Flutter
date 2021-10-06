@@ -1,5 +1,5 @@
 import 'package:logging/logging.dart';
-import 'package:news_headlines/theme/theme_enum.dart';
+import 'package:news_headlines/theme/enum/theme_enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreference {
@@ -22,8 +22,8 @@ class AppPreference {
     }
   }
 
-  static void setSelectedThemeEnum(ThemeEnum val) {
-    _instance!.setInt(_selectedTheme, val.index);
+  static void setSelectedThemeEnum(ThemeEnum value) {
+    _instance!.setInt(_selectedTheme, value.index);
   }
 
   static ThemeEnum getSelectedThemeEnum() {
@@ -39,24 +39,24 @@ class AppPreference {
     }
   }
 
-  static setSelectedCategory(String val) {
-    _instance!.setString(_selectedCategory, val);
+  static setSelectedCategory(String value) {
+    _instance!.setString(_selectedCategory, value);
   }
 
   static String getSelectedCategory() {
     return _instance!.getString(_selectedCategory) ?? 'All';
   }
 
-  static setSelectedCountry(String val) {
-    _instance!.setString(_selectedCountry, val);
+  static setSelectedCountry(String value) {
+    _instance!.setString(_selectedCountry, value);
   }
 
   static String getSelectedCountry() {
     return _instance!.getString(_selectedCountry) ?? 'All';
   }
 
-  static setSelectedLanguage(String val) {
-    _instance!.setString(_selectedLanguage, val);
+  static setSelectedLanguage(String value) {
+    _instance!.setString(_selectedLanguage, value);
   }
 
   static String getSelectedLanguage() {

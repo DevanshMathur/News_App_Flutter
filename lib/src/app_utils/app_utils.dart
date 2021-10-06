@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/theme_enum.dart';
+import '../../theme/enum/theme_enum.dart';
 import 'app_preference.dart';
 
 class AppUtils {
@@ -68,7 +68,7 @@ class AppUtils {
     }
   }
 
-  static List<String> getThemeModeList() => _themeModeList;
+  static List<String> getThemeList() => _themeModeList;
 
   static List<String> getLanguageList() => _languageList;
 

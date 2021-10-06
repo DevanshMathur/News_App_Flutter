@@ -7,13 +7,15 @@ import 'package:news_headlines/src/app/block/home/home_state.dart';
 import 'package:news_headlines/src/app/block/theme/theme_bloc.dart';
 import 'package:news_headlines/src/app/block/theme/theme_event.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
+import 'package:news_headlines/src/app/ui/home/enum/dropdown_enum.dart';
+import 'package:news_headlines/src/app/ui/home/widgets/dropdown_widget.dart';
 import 'package:news_headlines/src/app/ui/home/widgets/home_app_bar.dart';
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 import 'package:news_headlines/src/app_utils/api_constants.dart';
 import 'package:news_headlines/src/app_utils/app_preference.dart';
 import 'package:news_headlines/src/app_utils/app_utils.dart';
 
-import '../../../../theme/theme_enum.dart';
+import '../../../../theme/enum/theme_enum.dart';
 
 class NewsScreenWidget extends StatelessWidget {
   const NewsScreenWidget({Key? key}) : super(key: key);
@@ -101,85 +103,90 @@ class NewsHomeState extends State<NewsHome> {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Theme"),
-                      DropdownButton<String>(
-                          value: AppUtils.getSelectedTheme(),
-                          items: AppUtils.getThemeModeList().map((value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) =>
-                              switchTheme(AppUtils.getThemeEnum(value!))),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("News Category"),
-                      DropdownButton<String>(
-                        value: AppPreference.getSelectedCategory(),
-                        items: AppUtils.getCategoryList().map((value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (category) {
-                          setState(() {
-                            AppPreference.setSelectedCategory(category!);
-                            updateList();
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("News Language"),
-                      DropdownButton<String>(
-                        value: AppPreference.getSelectedLanguage(),
-                        items: AppUtils.getLanguageList().map((value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (language) {
-                          setState(() {
-                            AppPreference.setSelectedLanguage(language!);
-                            // updateList();
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("News Country"),
-                      DropdownButton<String>(
-                        value: AppPreference.getSelectedCountry(),
-                        items: AppUtils.getCountryList().map((value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (country) {
-                          setState(() {
-                            AppPreference.setSelectedCountry(country!);
-                            updateList();
-                          });
-                        },
-                      )
-                    ],
-                  ),
+                  DropDownWidget("App Theme", DropDownEnum.themeEnum, switchTheme),
+                  DropDownWidget("News Category", DropDownEnum.categoryEnum, updateList),
+                  DropDownWidget("News Language", DropDownEnum.languageEnum, updateList),
+                  DropDownWidget("News Country", DropDownEnum.countryEnum, updateList),
+                  //
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     const Text("App Theme"),
+                  //     DropdownButton<String>(
+                  //         value: AppUtils.getSelectedTheme(),
+                  //         items: AppUtils.getThemeList().map((value) {
+                  //           return DropdownMenuItem<String>(
+                  //             value: value,
+                  //             child: Text(value),
+                  //           );
+                  //         }).toList(),
+                  //         onChanged: (value) =>
+                  //             switchTheme(value!)),
+                  //   ],
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     const Text("News Category"),
+                  //     DropdownButton<String>(
+                  //       value: AppPreference.getSelectedCategory(),
+                  //       items: AppUtils.getCategoryList().map((value) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: value,
+                  //           child: Text(value),
+                  //         );
+                  //       }).toList(),
+                  //       onChanged: (value) {
+                  //         setState(() {
+                  //           AppPreference.setSelectedCategory(value!);
+                  //           updateList(value);
+                  //         });
+                  //       },
+                  //     )
+                  //   ],
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     const Text("News Language"),
+                  //     DropdownButton<String>(
+                  //       value: AppPreference.getSelectedLanguage(),
+                  //       items: AppUtils.getLanguageList().map((value) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: value,
+                  //           child: Text(value),
+                  //         );
+                  //       }).toList(),
+                  //       onChanged: (value) {
+                  //         setState(() {
+                  //           AppPreference.setSelectedLanguage(value!);
+                  //           // updateList();
+                  //         });
+                  //       },
+                  //     )
+                  //   ],
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     const Text("News Country"),
+                  //     DropdownButton<String>(
+                  //       value: AppPreference.getSelectedCountry(),
+                  //       items: AppUtils.getCountryList().map((value) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: value,
+                  //           child: Text(value),
+                  //         );
+                  //       }).toList(),
+                  //       onChanged: (value) {
+                  //         setState(() {
+                  //           AppPreference.setSelectedCountry(value!);
+                  //           updateList(value);
+                  //         });
+                  //       },
+                  //     )
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -197,10 +204,11 @@ class NewsHomeState extends State<NewsHome> {
     );
   }
 
-  void switchTheme(ThemeEnum val) {
+  void switchTheme(String value) {
     setState(() {
-      AppPreference.setSelectedThemeEnum(val); //save enum
-      switch (val) {
+      ThemeEnum e = AppUtils.getThemeEnum(value);
+      AppPreference.setSelectedThemeEnum(e); //save enum
+      switch (e) {
         case ThemeEnum.lightTheme:
           BlocProvider.of<ThemeBloc>(context)
               .add(const ThemeEvent(themeMode: ThemeMode.light));
@@ -217,7 +225,7 @@ class NewsHomeState extends State<NewsHome> {
     });
   }
 
-  void updateList() {
+  void updateList(String value) {
     articleList.clear();
     BlocProvider.of<HomeBloc>(context).add(HomeModule(
         page: page,
