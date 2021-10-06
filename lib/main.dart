@@ -8,6 +8,7 @@ import 'package:news_headlines/src/app/block/theme/theme_state.dart';
 import 'package:news_headlines/src/app_utils/api_constants.dart';
 import 'package:news_headlines/src/app_utils/app_preference.dart';
 import 'package:news_headlines/src/navigation/routes.dart';
+import 'package:news_headlines/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +33,9 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             routes: Routes.routes,
             initialRoute: Routes.homeScreen,
-            theme: state.themeData,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: state.themeMode,
             debugShowCheckedModeBanner: false,
           );
         },

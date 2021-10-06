@@ -4,12 +4,12 @@ import 'package:news_headlines/src/app/block/theme/theme_state.dart';
 import 'package:news_headlines/src/app_utils/app_utils.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  ThemeBloc() : super(ThemeState(themeData: AppUtils.getAppTheme()));
+  ThemeBloc() : super(ThemeState(themeMode: AppUtils.getSelectedThemeMode()));
 
   @override
   Stream<ThemeState> mapEventToState(ThemeEvent event) async* {
     if (event is ThemeEvent) {
-      yield ThemeState(themeData: event.themeData);
+      yield ThemeState(themeMode: event.themeMode);
     }
   }
 }

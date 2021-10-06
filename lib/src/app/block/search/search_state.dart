@@ -9,14 +9,12 @@ abstract class SearchState {
 class InitialSearchState extends SearchState {
   const InitialSearchState();
 
-  @override
   List<Object> get props => [];
 }
 
 class LoadingSearchState extends SearchState {
   const LoadingSearchState();
 
-  @override
   List<Object> get props => [];
 }
 
@@ -25,7 +23,6 @@ class LoadedSearchState extends SearchState {
 
   const LoadedSearchState(this.searchResponse);
 
-  @override
   List<Object> get props => [searchResponse];
 }
 
@@ -34,7 +31,6 @@ class SearchApiErrorState extends SearchState {
 
   const SearchApiErrorState(this.error);
 
-  @override
   List<Object?> get props => [error];
 }
 
@@ -43,6 +39,5 @@ class SearchErrorState extends SearchState {
 
   const SearchErrorState(this.error);
 
-  @override
   List<Object?> get props => [error];
 }

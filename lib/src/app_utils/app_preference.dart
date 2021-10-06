@@ -1,8 +1,9 @@
 import 'package:logging/logging.dart';
+import 'package:news_headlines/theme/theme_enum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreference {
-  static const _darkThemeEnabled = "darkThemeEnabled";
+  static const _selectedTheme = "selectedTheme";
   static const _selectedCategory = "selectedCategory";
   static const _selectedCountry = "selectedCountry";
   static const _selectedLanguage = "selectedLanguage";
@@ -12,6 +13,7 @@ class AppPreference {
   static final Future<SharedPreferences> _prefs =
       SharedPreferences.getInstance();
   static SharedPreferences? _instance;
+
   static Future getAppPrefInstance() async {
     try {
       _instance = await _prefs;
@@ -20,12 +22,21 @@ class AppPreference {
     }
   }
 
-  static setDarkThemeEnabled(bool val) {
-    _instance!.setBool(_darkThemeEnabled, val);
+  static void setSelectedThemeEnum(ThemeEnum val) {
+    _instance!.setInt(_selectedTheme, val.index);
   }
 
-  static bool getDarkThemeEnabled() {
-    return _instance!.getBool(_darkThemeEnabled) ?? false;
+  static ThemeEnum getSelectedThemeEnum() {
+    switch (_instance!.getInt(_selectedTheme) ?? 0) {
+      case 0:
+        return ThemeEnum.lightTheme;
+      case 1:
+        return ThemeEnum.darkTheme;
+      case 2:
+        return ThemeEnum.systemTheme;
+      default:
+        return ThemeEnum.systemTheme;
+    }
   }
 
   static setSelectedCategory(String val) {
@@ -51,30 +62,4 @@ class AppPreference {
   static String getSelectedLanguage() {
     return _instance!.getString(_selectedLanguage) ?? 'All';
   }
-
-  /*
-  addStringToSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('stringValue', "abc");
-  }
-
-  addBoolToSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('boolValue', true);
-  }
-
-  getStringValuesSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return String
-    String stringValue = prefs.getString('stringValue');
-    return stringValue;
-  }
-
-  getBoolValuesSF() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return bool
-    bool boolValue = prefs.getBool('boolValue');
-    return boolValue;
-  }
-   */
 }

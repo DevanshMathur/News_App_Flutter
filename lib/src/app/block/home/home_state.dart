@@ -9,14 +9,12 @@ abstract class HomeState {
 class InitialSearchState extends HomeState {
   const InitialSearchState();
 
-  @override
   List<Object> get props => [];
 }
 
 class LoadingSearchState extends HomeState {
   const LoadingSearchState();
 
-  @override
   List<Object> get props => [];
 }
 
@@ -25,7 +23,6 @@ class LoadedSearchState extends HomeState {
 
   const LoadedSearchState(this.searchResponse);
 
-  @override
   List<Object> get props => [searchResponse];
 }
 
@@ -34,7 +31,6 @@ class SearchApiErrorState extends HomeState {
 
   const SearchApiErrorState(this.error);
 
-  @override
   List<Object?> get props => [error];
 }
 
@@ -43,6 +39,5 @@ class SearchErrorState extends HomeState {
 
   const SearchErrorState(this.error);
 
-  @override
   List<Object?> get props => [error];
 }

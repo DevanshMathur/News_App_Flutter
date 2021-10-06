@@ -10,8 +10,10 @@ import 'package:news_headlines/src/app/repository/news/api/model/news_article.da
 import 'package:news_headlines/src/app/ui/home/widgets/home_app_bar.dart';
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
 import 'package:news_headlines/src/app_utils/api_constants.dart';
+import 'package:news_headlines/src/app_utils/app_preference.dart';
 import 'package:news_headlines/src/app_utils/app_utils.dart';
-import 'package:news_headlines/theme/app_theme.dart';
+
+import '../../../../theme/theme_enum.dart';
 
 class NewsScreenWidget extends StatelessWidget {
   const NewsScreenWidget({Key? key}) : super(key: key);
@@ -102,10 +104,17 @@ class NewsHomeState extends State<NewsHome> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Dark Mode"),
-                      Switch(
-                          value: AppUtils.getDarkMode(),
-                          onChanged: switchTheme),
+                      const Text("Theme"),
+                      DropdownButton<String>(
+                          value: AppUtils.getSelectedTheme(),
+                          items: AppUtils.getThemeModeList().map((value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (value) =>
+                              switchTheme(AppUtils.getThemeEnum(value!))),
                     ],
                   ),
                   Row(
@@ -113,7 +122,7 @@ class NewsHomeState extends State<NewsHome> {
                     children: [
                       const Text("News Category"),
                       DropdownButton<String>(
-                        value: AppUtils.getSelectedCategory(),
+                        value: AppPreference.getSelectedCategory(),
                         items: AppUtils.getCategoryList().map((value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -122,7 +131,7 @@ class NewsHomeState extends State<NewsHome> {
                         }).toList(),
                         onChanged: (category) {
                           setState(() {
-                            AppUtils.setSelectedCategory(category!);
+                            AppPreference.setSelectedCategory(category!);
                             updateList();
                           });
                         },
@@ -134,7 +143,7 @@ class NewsHomeState extends State<NewsHome> {
                     children: [
                       const Text("News Language"),
                       DropdownButton<String>(
-                        value: AppUtils.getSelectedLanguage(),
+                        value: AppPreference.getSelectedLanguage(),
                         items: AppUtils.getLanguageList().map((value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -143,7 +152,7 @@ class NewsHomeState extends State<NewsHome> {
                         }).toList(),
                         onChanged: (language) {
                           setState(() {
-                            AppUtils.setSelectedLanguage(language!);
+                            AppPreference.setSelectedLanguage(language!);
                             // updateList();
                           });
                         },
@@ -155,7 +164,7 @@ class NewsHomeState extends State<NewsHome> {
                     children: [
                       const Text("News Country"),
                       DropdownButton<String>(
-                        value: AppUtils.getSelectedCountry(),
+                        value: AppPreference.getSelectedCountry(),
                         items: AppUtils.getCountryList().map((value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -164,7 +173,7 @@ class NewsHomeState extends State<NewsHome> {
                         }).toList(),
                         onChanged: (country) {
                           setState(() {
-                            AppUtils.setSelectedCountry(country!);
+                            AppPreference.setSelectedCountry(country!);
                             updateList();
                           });
                         },
@@ -188,21 +197,27 @@ class NewsHomeState extends State<NewsHome> {
     );
   }
 
-  void switchTheme(bool val) {
+  void switchTheme(ThemeEnum val) {
     setState(() {
-      AppUtils.setDarkMode(val);
-      if (val) {
-        BlocProvider.of<ThemeBloc>(context)
-            .add(ThemeEvent(themeData: AppTheme.darkTheme));
-      } else {
-        BlocProvider.of<ThemeBloc>(context)
-            .add(ThemeEvent(themeData: AppTheme.lightTheme));
+      AppPreference.setSelectedThemeEnum(val); //save enum
+      switch (val) {
+        case ThemeEnum.lightTheme:
+          BlocProvider.of<ThemeBloc>(context)
+              .add(const ThemeEvent(themeMode: ThemeMode.light));
+          break;
+        case ThemeEnum.darkTheme:
+          BlocProvider.of<ThemeBloc>(context)
+              .add(const ThemeEvent(themeMode: ThemeMode.dark));
+          break;
+        case ThemeEnum.systemTheme:
+          BlocProvider.of<ThemeBloc>(context)
+              .add(const ThemeEvent(themeMode: ThemeMode.system));
+          break;
       }
     });
   }
 
   void updateList() {
-
     articleList.clear();
     BlocProvider.of<HomeBloc>(context).add(HomeModule(
         page: page,
