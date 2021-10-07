@@ -33,6 +33,13 @@ class NewsDetails extends StatelessWidget {
             TitledTextWidget("Name :", false, news.source!.name),
             TitledTextWidget("ID :", false, news.source!.id),
             TitledTextWidget("Author :", false, news.author),
+            TitledTextWidget(
+              //2021-10-07T04:00:15Z
+                "Date :",
+                false,
+                news.publishedAt != null
+                    ? news.publishedAt!.split('T')[0]
+                    : null),
           ],
         ),
       ),
