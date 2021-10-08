@@ -105,7 +105,7 @@ class NewsHomeState extends State<NewsHome> {
                 children: [
                   DropDownWidget("App Theme", DropDownEnum.themeEnum, switchTheme),
                   DropDownWidget("News Category", DropDownEnum.categoryEnum, updateList),
-                  DropDownWidget("News Language", DropDownEnum.languageEnum, updateList),
+                  // DropDownWidget("News Language", DropDownEnum.languageEnum, updateList),
                   DropDownWidget("News Country", DropDownEnum.countryEnum, updateList),
                 ],
               ),
