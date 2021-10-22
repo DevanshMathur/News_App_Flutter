@@ -11,8 +11,8 @@ class Routes {
   static const String newsDetails = '/details';
 
   static final routes = <String, WidgetBuilder>{
-    homeScreen: (context) => const NewsScreenWidget(),
-    newsSearch: (context) => const SearchScreenWidget(),
+    homeScreen: (context) => const NewsScreen(),
+    newsSearch: (context) => const SearchScreen(),
     newsDetails: (context) => const NewsDetails(),
   };
 }

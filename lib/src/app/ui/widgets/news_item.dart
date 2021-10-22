@@ -14,26 +14,23 @@ class NewsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, Routes.newsDetails, arguments: newsItem);
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const NewsDetails(),
-        //
-        //   ),
-        // );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextWidget(newsItem.title, true),
-            ImageWidget(newsItem.urlToImage),
-            TextWidget(newsItem.description, false),
-          ],
+    return Card(
+      elevation: 10,
+      margin: const EdgeInsets.all(5),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, Routes.newsDetails, arguments: newsItem);
+        },
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextWidget(newsItem.title, true),
+              ImageWidget(newsItem.urlToImage),
+              TextWidget(newsItem.description, false),
+            ],
+          ),
         ),
       ),
     );

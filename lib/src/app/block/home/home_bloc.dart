@@ -12,7 +12,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   @override
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
     yield const LoadingSearchState();
-    if (event is HomeModule) {
+    if (event is HomeFetchEvent) {
       try {
         final ApiResponseWrapper<NewsResponse> searchResponse =
             await NewsRepository().getNewsHeadlines(
