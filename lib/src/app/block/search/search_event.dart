@@ -4,14 +4,14 @@ abstract class SearchEvent extends Equatable {
   const SearchEvent();
 }
 
-class SearchModule extends SearchEvent {
+class SearchQueryEvent extends SearchEvent {
   final int page;
   // final int pageSize;
   final String? query;
   // final String? country;
   // final String? category;
 
-  const SearchModule({
+  const SearchQueryEvent({
     required this.page,
     /*required this.pageSize,*/ required this.query,
     // this.category,
@@ -20,4 +20,10 @@ class SearchModule extends SearchEvent {
 
   @override
   List<Object?> get props => [page];
+}
+
+class ResetSearchEvent extends SearchEvent {
+  @override
+  List<Object?> get props => [];
+
 }

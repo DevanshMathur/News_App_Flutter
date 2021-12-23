@@ -4,6 +4,7 @@ import 'package:news_headlines/src/app/block/search/search_bloc.dart';
 import 'package:news_headlines/src/app/block/search/search_event.dart';
 import 'package:news_headlines/src/app/block/search/search_state.dart';
 import 'package:news_headlines/src/app/repository/news/api/model/news_article.dart';
+import 'package:news_headlines/src/app/ui/home/widgets/custom_drawer.dart';
 import 'package:news_headlines/src/app/ui/search/widgets/search_app_bar.dart';
 import 'package:news_headlines/src/app/ui/widgets/custom_loader.dart';
 import 'package:news_headlines/src/app/ui/widgets/news_item.dart';
@@ -41,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
         !isLoading) {
       page++;
       searchBloc.add(
-        SearchModule(
+        SearchQueryEvent(
           page: page,
           query: queryTextController.text,
         ),
@@ -109,7 +110,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if (queryTextController.text.trim().isNotEmpty) {
       articleList.clear();
       searchBloc.add(
-        SearchModule(
+        SearchQueryEvent(
           page: page,
           query: queryTextController.text,
         ),
@@ -120,6 +121,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     super.dispose();
+    searchBloc.add(
+      ResetSearchEvent(),
+    );
+    searchBloc.close();
     _controller.dispose();
     queryTextController.dispose();
   }

@@ -10,13 +10,13 @@ class AppPreference {
 
   static final Logger _log = Logger('AppPreference');
 
-  static final Future<SharedPreferences> _prefs =
-      SharedPreferences.getInstance();
+
+
   static SharedPreferences? _instance;
 
   static Future getAppPrefInstance() async {
     try {
-      _instance = await _prefs;
+      _instance = await SharedPreferences.getInstance();
     } catch (e) {
       _log.log(Level.INFO, e.toString());
     }

@@ -11,7 +11,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   @override
   Stream<SearchState> mapEventToState(SearchEvent event) async* {
     yield const LoadingSearchState();
-    if (event is SearchModule) {
+    if (event is SearchQueryEvent) {
       try {
         final ApiResponseWrapper<NewsResponse> searchResponse =
             await NewsRepository().getSearchedQuery(
@@ -32,6 +32,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       } catch (e) {
         yield const SearchApiErrorState(null);
       }
+    }
+    else if (event is ResetSearchEvent) {
+      yield const InitialSearchState();
     }
   }
 }
